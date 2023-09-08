@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Terse Squirrel</title>
@@ -7,6 +8,8 @@
   <style>
     body {
       background-color: #008F00;
+      margin: 0;
+      padding: 0;
     }
 
     .container {
@@ -14,17 +17,104 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
+      position: relative;
     }
-    img {
-      max-width: 100%;
-      max-height: 100vh;
-      object-fit: contain;
+
+    img,
+    .center-text {
+      transition: all 2s ease;
+    }
+
+    .center-text {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0;
+    }
+
+    #text {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 2rem;
     }
   </style>
 </head>
+
 <body>
   <div class="container">
-    <img src="images/terse_squirrel.png" alt="Terse Squirrel Logo">
+    <img id="image" src="images/terse_squirrel.png" alt="Terse Squirrel Logo">
+    <div class="center-text" id="text">New Text</div>
   </div>
+
+  <script>
+    const image = document.getElementById("image");
+    const text = document.getElementById("text");
+
+    const obfuscatedTexts = [
+      "RnVlbGVkIGJ5IG51dHMgYW5kIGEgYmFkIGF0dGl0dWRlLg==",
+      "VGFpbCB1cCwgcGF3cyBkb3duLCBJIHJ1biB0aGlzIHRvd24h",
+      "TnV0IHRvZGF5LCB3b3JsZC4gTnV0IHRvZGF5Lg==",
+      "UnVubmluZyBvbiBjYWZmZWluZSBhbmQgYWNvcm5zLg==",
+      "VGFpbCBhcyBvbGQgYXMgdGltZSwgZ3J1bXB5IGFzIGNhbiBiZS4=",
+      "SSdtIG5vdCBhbmdyeSwgSSdtIGp1c3QgYSBsaXR0bGUgbnV0cy4=",
+      "T3VyIGRldmVsb3BlcnMgYXJlIGEgbGl0dGxlIG51dHMu",
+      "RnVlbGVkIGJ5IEFuZ2VyIGFuZCBBbG1vbmRzLg==",
+      "SSd2ZSBnb3QgOTkgcHJvYmxlbXMsIGJ1dCBhIG51dCBhaW4ndCBvbmUu",
+      "TGV0J3MgZ2V0IG51dHMh",
+      "TnV0cyBhYm91dCBzdWNjZXNzLCBjcmF6eSBhYm91dCBsaWZlLg==",
+      "VG91Z2ggbnV0IHRvIGNyYWNrLg==",
+      "Q2FsbCBtZSB0aGUgTnV0dHkgUHJvZmVzc29yLg==",
+      "VG9vIG51dHR5IHRvIHF1aXQu",
+      "RG9uJ3QgbWFrZSBtZSBnbyBmdWxsIHNxdWlycmVsIG9uIHlvdS4=",
+      "V2UncmUgbm90IGp1c3QgbnV0cywgd2UncmUgdGVyc2UgbnV0cyE=",
+      "QW5ncnksIGJ1dCBJIHN0aWxsIGNhcmUgYWJvdXQgbXkgaGFpci4=",
+      "SXQncyBhIHNxdWlycmVsLWVhdC1udXQgd29ybGQgb3V0IHRoZXJlLg==",
+      "SSd2ZSBnb3QgbnV0LXRoaW5nIHRvIGxvc2Uh",
+      "RG9uJ3QgdW5kZXJlc3RpbWF0ZSB0aGUgcG93ZXIgb2YgYSBzcXVpcnJlbCBvbiBhIG1pc3Npb24u",
+      "TXkgdmliZT8gU3F1aXJyZWxpdHVkZS4="
+    ];
+
+    // Randomly pick and decode a string
+    const randomIndex = Math.floor(Math.random() * obfuscatedTexts.length);
+    const decodedText = atob(obfuscatedTexts[randomIndex]);
+
+    // Set the decoded text
+    text.textContent = decodedText;
+
+    image.onload = function () {
+      const aspectRatio = this.naturalWidth / this.naturalHeight;
+      let height = window.innerHeight;
+      let width = height * aspectRatio;
+
+      if (width > window.innerWidth) {
+        width = window.innerWidth;
+        height = width / aspectRatio;
+      }
+
+      image.style.width = `${width}px`;
+      image.style.height = `${height}px`;
+
+      setTimeout(() => {
+        const rect = image.getBoundingClientRect();
+        image.style.position = "fixed";
+        image.style.left = `${rect.left}px`;
+        image.style.top = `${rect.top}px`;
+        image.style.width = `${rect.width}px`;
+        image.style.height = `${rect.height}px`;
+
+        // Start image animation
+        image.style.left = "0";
+        image.style.top = "0";
+        image.style.width = "200px";
+        image.style.height = "200px";
+      }, 1000);
+
+      // Start text animation 2 seconds after image animation is done
+      setTimeout(() => {
+        text.style.opacity = "1";
+      }, 3000);
+    };
+  </script>
 </body>
+
 </html>
